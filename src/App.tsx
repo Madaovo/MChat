@@ -1,25 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import routes, { routerConfigModel } from "./routes";
+import { HashRouter, Route, Switch } from "react-router-dom";
+import FrontendAuth from "./components/FrontendAuth";
+import { CssBaseline, ThemeProvider } from "@material-ui/core";
+import theme from "./theme/theme";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <HashRouter>
+        <Switch>
+          {routes.map((item: routerConfigModel, i: number) => {
+            if (item.auth) {
+              return (
+                <FrontendAuth
+                  key={i}
+                  path={item.path}
+                  exact={item.exact}
+                  // component={item.component}
+                >
+                  <item.component />
+                </FrontendAuth>
+              );
+            } else {
+              return (
+                <Route
+                  key={i}
+                  path={item.path}
+                  exact={item.exact}
+                  component={item.component}
+                ></Route>
+              );
+            }
+          })}
+        </Switch>
+      </HashRouter>
+    </ThemeProvider>
   );
 }
 
