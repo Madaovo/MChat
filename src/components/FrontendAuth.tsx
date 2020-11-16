@@ -1,9 +1,6 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-interface propsModel {
-  children: ReactNode;
-}
 const FrontendAuth = ({ children, ...rest }: any) => {
   const isLogin = localStorage.getItem("_token");
   console.log(isLogin ? true : false);
