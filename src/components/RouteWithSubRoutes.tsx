@@ -7,7 +7,7 @@ export default function RouteWithSubRoutes(route: routerConfigModel) {
     <>
       {route.auth ? (
         <FrontendAuth path={route.path} exact={route.exact}>
-          <route.component />
+          <route.component routes={route.routes} />
         </FrontendAuth>
       ) : (
         <Route

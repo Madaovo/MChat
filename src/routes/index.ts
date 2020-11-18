@@ -1,6 +1,7 @@
 import Home from "../views/Home";
 import Login from "../views/Login";
 import Chat from "../views/Chat";
+import Pie from "../views/Pie";
 import Redirects from "../views/Redirects";
 
 export interface routerConfigModel {
@@ -25,6 +26,12 @@ const routes: routerConfigModel[] = [
       {
         path: "/main/chat",
         component: Chat,
+        auth: true,
+        exact: true,
+      },
+      {
+        path: "/main/pie",
+        component: Pie,
         auth: true,
         exact: true,
       },

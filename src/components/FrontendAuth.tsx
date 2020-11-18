@@ -3,7 +3,6 @@ import { Route, Redirect } from "react-router-dom";
 
 const FrontendAuth = ({ children, ...rest }: any) => {
   const isLogin = localStorage.getItem("_token");
-  console.log(isLogin ? true : false);
   return (
     <Route
       {...rest}
