@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import {
   Grid,
   Typography,
@@ -17,6 +18,8 @@ import {
 } from "@material-ui/core";
 import lion from "../asserts/lion.jpg";
 import { useForm } from "react-hook-form";
+import { login } from "../api/login";
+import Loading from "../constom/loading";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,6 +52,8 @@ const Login = () => {
   });
   const [progress, setProgress] = useState(10);
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
+
   const handleChangeUserInfo = (e: any) => {
     setUserInfo((state) => ({
       ...state,
@@ -57,19 +62,30 @@ const Login = () => {
   };
 
   const handleLogin = (data: IUserInfo) => {
-    console.log(data);
+    setLoading(true);
+    const timer = setInterval(() => {
+      setProgress((prevProgress) =>
+        prevProgress >= 100 ? 10 : prevProgress + 10
+      );
+    }, 800);
+    login(data)
+      .then(({ data }) => {
+        if (data.code === 0) {
+          setTimeout(() => {
+            localStorage.setItem("_token", data.data.token);
+            clearInterval(timer);
+            setLoading(false);
+            history.push("/main");
+          }, 3000);
+        }
+        return undefined;
+      })
+      .catch((error) => {
+        clearInterval(timer);
+        setLoading(false);
+        console.debug(error);
+      });
   };
-
-  // React.useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setProgress((prevProgress) =>
-  //       prevProgress >= 100 ? 10 : prevProgress + 10
-  //     );
-  //   }, 800);
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, []);
 
   return (
     <>
@@ -83,13 +99,7 @@ const Login = () => {
             alignItems="center"
           >
             {loading ? (
-              <CircularProgress
-                value={progress}
-                variant="static"
-                color="secondary"
-                thickness={8}
-                size={60}
-              />
+              <Loading start={loading} space={30} />
             ) : (
               <>
                 <Typography component="h1" variant="h5">
