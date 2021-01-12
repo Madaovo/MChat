@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(2),
     },
     center: {
+      position: "relative",
       borderRadius: "15px",
       backgroundColor: "#f3f6fb",
       padding: theme.spacing(4),

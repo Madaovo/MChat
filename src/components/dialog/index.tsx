@@ -1,5 +1,6 @@
 import React from "react";
 import ChatDialogItem from "../dialog-item";
+import ChatInput from "../input";
 
 const ChatDialog = () => {
   return (
@@ -22,6 +23,7 @@ const ChatDialog = () => {
         bgcolor="#fff"
         avatarUrl="https://material-ui.com/static/images/avatar/2.jpg"
       />
+      <ChatInput />
     </>
   );
 };
