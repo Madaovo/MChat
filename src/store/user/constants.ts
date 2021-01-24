@@ -1,0 +1,5 @@
+export const SET_USERNAME = 'user/SET_USERNAME'
+export const SET_PASSWORD = 'user/SET_PASSWORD'
+export const SET_USERID = 'user/SET_USERID'
+export const SET_ISREMEMBER = 'user/SET_ISREMEMBER'
+export const CHANGE_USER = 'user/CHANGE_USER'

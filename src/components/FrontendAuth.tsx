@@ -1,8 +1,9 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
+import { getToken } from '../utilies/storage/user'
 
 const FrontendAuth = ({ children, ...rest }: any) => {
-  const isLogin = localStorage.getItem("_token");
+  const isLogin = getToken();
   return (
     <Route
       {...rest}

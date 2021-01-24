@@ -8,10 +8,8 @@ import {
   createStyles,
   IconButton,
   Button,
-  Icon,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
 import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
 import SendIcon from "@material-ui/icons/Send";
 
@@ -77,10 +75,6 @@ const ChatInput = () => {
         >
           Send
         </Button>
-        {/* <IconButton className={classes.iconButton} aria-label="send">
-          Send
-          <SendIcon color="primary" />
-        </IconButton> */}
       </Box>
     </>
   );

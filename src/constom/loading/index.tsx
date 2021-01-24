@@ -23,7 +23,7 @@ const Loading = ({ start, space }: IProps) => {
     return () => {
       clearInterval(timer);
     };
-  }, [start]);
+  }, [start, space]);
 
   return (
     <CircularProgress

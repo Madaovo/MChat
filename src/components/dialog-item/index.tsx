@@ -5,7 +5,6 @@ import {
   createStyles,
   Theme,
   Avatar,
-  CssBaseline,
   useTheme,
 } from "@material-ui/core";
 

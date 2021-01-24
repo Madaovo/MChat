@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import {
   Grid,
   Paper,
@@ -6,11 +6,15 @@ import {
   makeStyles,
   Theme,
   Box,
+  Avatar,
+  Button,
 } from "@material-ui/core";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import ChatAvatar from "../components/avatar";
 import ChatList from "../components/list";
 import ChatDialog from "../components/dialog";
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import PersonPinIcon from "@material-ui/icons/PersonPin";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,7 +35,18 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: "#f3f6fb",
       padding: theme.spacing(4),
     },
+    avatar: {
+      width: "114px",
+      height: "114px",
+    },
   })
+);
+
+const Text = ({ icon, text }: { icon: any; text: string }) => (
+  <Box display="flex" alignItems="center" width="100%">
+    {icon}
+    <Box ml={1}>{text}</Box>
+  </Box>
 );
 
 export default function Chat() {
@@ -60,7 +75,24 @@ export default function Chat() {
           <ChatDialog />
         </Grid>
         <Grid item xs={3}>
-          <h3>Chat</h3>
+          <Box
+            display="flex"
+            bgcolor="#f5f7fb"
+            borderRadius={4}
+            alignItems="center"
+            justifyContent="space-between"
+            flexDirection="column"
+            p={4}
+            height="300px"
+          >
+            <Avatar
+              src="https://material-ui.com/static/images/avatar/2.jpg"
+              className={classes.avatar}
+            />
+            <Text icon={<MailOutlineIcon />} text="herabod@gmail.com" />
+            <Text icon={<PersonPinIcon />} text="hHerabod" />
+            <Button variant="outlined">Archive</Button>
+          </Box>
         </Grid>
       </Grid>
     </Grid>

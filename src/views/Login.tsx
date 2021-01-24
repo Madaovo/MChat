@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Grid,
@@ -10,16 +10,23 @@ import {
   FormControl,
   Button,
   Paper,
-  TextField,
   Checkbox,
   FormControlLabel,
   Link,
-  CircularProgress,
+  InputLabel,
+  Input,
+  InputAdornment,
+  IconButton,
+  FormHelperText,
 } from "@material-ui/core";
 import lion from "../asserts/lion.jpg";
 import { useForm } from "react-hook-form";
 import { login } from "../api/login";
 import Loading from "../constom/loading";
+import * as UserStorage from "../utilies/storage/user";
+import { changeUser } from "../store/user/actionCreators";
+import { useSelector, useDispatch } from "react-redux";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,54 +45,55 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface IUserInfo {
-  username: string;
-  password: string;
-}
-
 const Login = () => {
   const classes = useStyles();
-  const { handleSubmit, register, errors } = useForm();
-  const [userInfo, setUserInfo] = useState({
-    username: "",
-    password: "",
-  });
-  const [progress, setProgress] = useState(10);
-  const [loading, setLoading] = useState(false);
+  // immutable
+  const user = useSelector((state: any) => state.getIn(["user", "user"]));
   const history = useHistory();
+  const dispatch = useDispatch();
+  const { handleSubmit, register, errors } = useForm();
+  const [showPassword, setShowPassword] = useState(false);
+  const [userInfo, setUserInfo] = useState(user.toJS());
+  const [loading, setLoading] = useState(false);
 
   const handleChangeUserInfo = (e: any) => {
-    setUserInfo((state) => ({
+    setUserInfo((state: any) => ({
       ...state,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const handleLogin = (data: IUserInfo) => {
+  const handleLogin = (data: IUser) => {
+    console.log(data);
     setLoading(true);
-    const timer = setInterval(() => {
-      setProgress((prevProgress) =>
-        prevProgress >= 100 ? 10 : prevProgress + 10
-      );
-    }, 800);
-    login(data)
-      .then(({ data }) => {
-        if (data.code === 0) {
-          setTimeout(() => {
-            localStorage.setItem("_token", data.data.token);
-            clearInterval(timer);
-            setLoading(false);
-            history.push("/main");
-          }, 3000);
+    login({ username: data.username, password: data.password })
+      .then((res: any) => {
+        console.log(res);
+        if (res.code === 0) {
+          UserStorage.setToken(res.data.token);
+          if (!data.isRemember) {
+            data.password = "";
+          }
+          UserStorage.setUer({ ...res.data, ...data });
+          setLoading(false);
+          dispatch(changeUser({ ...res.data, ...data }));
+          history.push("/main");
+        } else {
+          setLoading(false);
         }
         return undefined;
       })
       .catch((error) => {
-        clearInterval(timer);
         setLoading(false);
         console.debug(error);
       });
   };
+
+  useEffect(() => {
+    if (UserStorage.getToken()) {
+      history.push("/main");
+    }
+  }, []);
 
   return (
     <>
@@ -107,56 +115,72 @@ const Login = () => {
                 </Typography>
                 <Box display="flex" margin={2}>
                   <form onSubmit={handleSubmit(handleLogin)}>
-                    <TextField
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="input-username"
-                      label="Username"
-                      name="username"
-                      autoComplete="username"
-                      autoFocus
-                      value={userInfo.username}
-                      onChange={(e) => {
-                        handleChangeUserInfo(e);
-                      }}
-                      inputRef={register({
-                        required: "no username is dame",
-                        maxLength: { value: 20, message: "too long" },
-                      })}
-                      helperText={
-                        errors.username
+                    <FormControl variant="outlined" margin="normal" fullWidth>
+                      <InputLabel htmlFor="input-username">Username</InputLabel>
+                      <Input
+                        required
+                        id="input-username"
+                        name="username"
+                        autoComplete="username"
+                        autoFocus
+                        value={userInfo.username}
+                        onChange={(e) => {
+                          handleChangeUserInfo(e);
+                        }}
+                        inputRef={register({
+                          required: "no username is dame",
+                          maxLength: { value: 20, message: "too long" },
+                        })}
+                        error={Boolean(errors.username)}
+                      />
+                      <FormHelperText>
+                        {errors.username
                           ? errors.username.message
-                          : "input your username"
-                      }
-                      error={Boolean(errors.username)}
-                    />
-                    <TextField
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="input-password"
-                      label="Password"
-                      name="password"
-                      autoComplete="password"
-                      autoFocus
-                      value={userInfo.password}
-                      onChange={(e) => {
-                        handleChangeUserInfo(e);
-                      }}
-                      inputRef={register({
-                        required: "no password is dame",
-                        maxLength: { value: 20, message: "too long" },
-                      })}
-                      helperText={
-                        errors.password
+                          : "input your username"}
+                      </FormHelperText>
+                    </FormControl>
+                    <FormControl variant="outlined" margin="normal" fullWidth>
+                      <InputLabel htmlFor="input-password">Password</InputLabel>
+                      <Input
+                        id="input-password"
+                        name="password"
+                        autoComplete="password"
+                        autoFocus
+                        required
+                        value={userInfo.password}
+                        onChange={(e) => {
+                          handleChangeUserInfo(e);
+                        }}
+                        inputRef={register({
+                          required: "no password is dame",
+                          maxLength: { value: 20, message: "too long" },
+                        })}
+                        type={showPassword ? "text" : "password"}
+                        error={Boolean(errors.password)}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={() => {
+                                setShowPassword((pre) => !pre);
+                              }}
+                              onMouseDown={(event) => event.preventDefault()}
+                            >
+                              {showPassword ? (
+                                <Visibility />
+                              ) : (
+                                <VisibilityOff />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+                      <FormHelperText>
+                        {errors.password
                           ? errors.password.message
-                          : "input your password"
-                      }
-                      error={Boolean(errors.password)}
-                    />
+                          : "input your password"}
+                      </FormHelperText>
+                    </FormControl>
                     <FormControl fullWidth margin="normal">
                       <Button
                         variant="contained"
@@ -174,7 +198,17 @@ const Login = () => {
                       <FormControl>
                         <FormControlLabel
                           label="Remember me"
-                          control={<Checkbox color="secondary" />}
+                          control={
+                            <Checkbox
+                              color="secondary"
+                              checked={userInfo.isRemember}
+                              name="isRemember"
+                              inputRef={register}
+                              onChange={(e) => {
+                                handleChangeUserInfo(e);
+                              }}
+                            />
+                          }
                         />
                       </FormControl>
                       <Link href="#" variant="body2" color="secondary">
