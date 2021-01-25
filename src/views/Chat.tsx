@@ -15,6 +15,7 @@ import ChatList from "../components/list";
 import ChatDialog from "../components/dialog";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import PersonPinIcon from "@material-ui/icons/PersonPin";
+import "../utilies/socket";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
