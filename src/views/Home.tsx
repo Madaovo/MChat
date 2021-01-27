@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Switch } from "react-router-dom";
 import { Box } from "@material-ui/core";
 import RouteWithSubRoutes from "../components/RouteWithSubRoutes";

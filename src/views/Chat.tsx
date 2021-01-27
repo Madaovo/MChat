@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Grid,
   Paper,
@@ -15,7 +15,9 @@ import ChatList from "../components/list";
 import ChatDialog from "../components/dialog";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import PersonPinIcon from "@material-ui/icons/PersonPin";
-import "../utilies/socket";
+import { io, Socket } from "socket.io-client";
+import { getToken } from "../utilies/storage/user";
+import useWebSocket from "../hooks/useWebSocket";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -50,8 +52,11 @@ const Text = ({ icon, text }: { icon: any; text: string }) => (
   </Box>
 );
 
+const WsContext = React.createContext({});
+
 export default function Chat() {
   const classes = useStyles();
+  const { ws, addFriend, send } = useWebSocket("ws://localhost:7001/");
 
   return (
     <Grid container className={classes.root}>
