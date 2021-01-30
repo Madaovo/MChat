@@ -68,7 +68,6 @@ const Login = () => {
     setLoading(true);
     login({ username: data.username, password: data.password })
       .then((res: any) => {
-        console.log(res);
         if (res.code === 0) {
           UserStorage.setToken(res.data.token);
           if (!data.isRemember) {

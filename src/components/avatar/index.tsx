@@ -17,8 +17,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ChatAvatar = () => {
+interface IProps {
+  user: IUser;
+}
+
+const ChatAvatar = ({ user }: IProps) => {
   const classes = useStyles();
+
   return (
     <>
       <Box
@@ -39,7 +44,7 @@ const ChatAvatar = () => {
         />
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box fontSize={22} fontWeight="bold" mr={1}>
-            Bill borland
+            {user.nickname}
           </Box>
           <SettingsIcon color="primary" />
         </Box>

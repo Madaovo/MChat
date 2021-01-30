@@ -13,6 +13,7 @@ import {
   CloudDownloadOutlined,
   PieChartOutlined,
   ViewCompactOutlined,
+  PersonAdd,
 } from "@material-ui/icons";
 
 const CenterListItem = withStyles(
@@ -59,6 +60,9 @@ export default function NavBar() {
               </CenterListItem>
             </Link>
           ))}
+          <CenterListItem button>
+            <PersonAdd />
+          </CenterListItem>
         </List>
       </Box>
     </>

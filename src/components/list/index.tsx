@@ -10,6 +10,7 @@ import {
   ListItemAvatar,
   ListItemText,
   withStyles,
+  Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
@@ -62,9 +63,14 @@ const MyListItem = withStyles({
   },
 })(ListItem);
 
-const ChatList = () => {
+interface IProps {
+  user: IUser;
+}
+
+const ChatList = ({ user }: IProps) => {
   const classes = useStyles();
   const [hidden, setHidden] = useState(false);
+  console.log(user.friends);
   return (
     <>
       <Box>
@@ -86,7 +92,19 @@ const ChatList = () => {
           {hidden ? <ExpandMoreIcon /> : <ExpandLessIcon />}
         </Box>
         <List className={clsx(classes.list, hidden && classes.hidden)}>
-          <MyListItem button selected={true}>
+          {user.friends_length > 0 ? (
+            user.friends.map((friend: IUser, index: number) => (
+              <MyListItem button selected={true} key={index}>
+                <ListItemAvatar>
+                  <Avatar src="https://material-ui.com/static/images/avatar/1.jpg" />
+                </ListItemAvatar>
+                <ListItemText primary={friend.nickname} />
+              </MyListItem>
+            ))
+          ) : (
+            <Typography>快去添加好友吧</Typography>
+          )}
+          {/* <MyListItem button selected={true}>
             <ListItemAvatar>
               <Avatar src="https://material-ui.com/static/images/avatar/1.jpg" />
             </ListItemAvatar>
@@ -98,7 +116,7 @@ const ChatList = () => {
             </ListItemAvatar>
             <ListItemText primary="Henry Boyd" />
             <span className={classes.redDot}>2</span>
-          </MyListItem>
+          </MyListItem> */}
         </List>
       </Box>
     </>

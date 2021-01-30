@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Paper,
@@ -12,6 +12,8 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import SentimentSatisfiedIcon from "@material-ui/icons/SentimentSatisfied";
 import SendIcon from "@material-ui/icons/Send";
+import WebSocket from "utilies/socket";
+import { friendRequest } from "utilies/socket/parseMsg";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,6 +46,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const ChatInput = () => {
   const classes = useStyles();
+  const [socket] = useState(WebSocket.getInstance());
+
+  const send = () => {
+    socket.emit(
+      "friend request",
+      friendRequest("790452097", "790452097", "hello")
+    );
+  };
 
   return (
     <>
@@ -72,6 +82,9 @@ const ChatInput = () => {
           color="primary"
           endIcon={<SendIcon />}
           className={classes.button}
+          onClick={() => {
+            send();
+          }}
         >
           Send
         </Button>

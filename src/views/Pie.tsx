@@ -1,4 +1,12 @@
 import React from "react";
+import { Grid } from "@material-ui/core";
 export default function Pie() {
-  return <h3>Pie</h3>;
+  return (
+    <>
+      <Grid item xs={5}>
+        add friend
+      </Grid>
+      <Grid item xs={7}></Grid>
+    </>
+  );
 }
