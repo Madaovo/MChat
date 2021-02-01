@@ -10,6 +10,8 @@ import {
   Theme,
 } from "@material-ui/core";
 import SettingsIcon from "@material-ui/icons/Settings";
+import { useSelector } from "react-redux";
+import { RootState } from "store/reducer";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -17,12 +19,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface IProps {
-  user: IUser;
-}
-
-const ChatAvatar = ({ user }: IProps) => {
+const ChatAvatar = () => {
   const classes = useStyles();
+  const user = useSelector((state: RootState) => state.user);
 
   return (
     <>

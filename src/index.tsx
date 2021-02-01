@@ -5,7 +5,12 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import store from "./store";
+import reducer from "./store/reducer";
+import { configureStore } from "@reduxjs/toolkit";
+
+const store = configureStore({
+  reducer,
+});
 
 ReactDOM.render(
   <React.StrictMode>

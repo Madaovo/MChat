@@ -15,8 +15,6 @@ import ChatList from "../components/list";
 import ChatDialog from "../components/dialog";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import PersonPinIcon from "@material-ui/icons/PersonPin";
-import { useSelector } from "react-redux";
-import clsx from "clsx";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,9 +47,8 @@ const Text = ({ icon, text }: { icon: any; text: string }) => (
   </Box>
 );
 
-export default function Chat() {
+const Chat = () => {
   const classes = useStyles();
-  const userIm = useSelector((state: any) => state.getIn(["user", "user"]));
 
   return (
     <>
@@ -65,10 +62,10 @@ export default function Chat() {
           </Box>
         </Grid>
         <Grid item xs={12}>
-          <ChatAvatar user={userIm.toJS()} />
+          <ChatAvatar />
         </Grid>
         <Grid item xs={12} className={classes.mt}>
-          <ChatList user={userIm.toJS()} />
+          <ChatList />
         </Grid>
       </Grid>
       <Grid item xs={6} className={classes.center}>
@@ -96,4 +93,6 @@ export default function Chat() {
       </Grid>
     </>
   );
-}
+};
+
+export default React.memo(Chat);

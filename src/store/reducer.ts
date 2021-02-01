@@ -1,6 +1,11 @@
-import { combineReducers } from 'redux-immutable';
-import { reducer as userReducer } from './user/index';
+// import { combineReducers } from "redux-immutable";
+import { combineReducers } from "redux";
+import userReducer from "./user";
 
-export default combineReducers({
-    user: userReducer
-})
+const reducer = combineReducers({
+  user: userReducer,
+});
+
+export type RootState = ReturnType<typeof reducer>;
+
+export default reducer;

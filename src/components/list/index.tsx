@@ -15,6 +15,9 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import clsx from "clsx";
+import { useSelector } from "react-redux";
+import { RootState } from "store/reducer";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     largeAvatar: { width: theme.spacing(14), height: theme.spacing(14) },
@@ -63,14 +66,10 @@ const MyListItem = withStyles({
   },
 })(ListItem);
 
-interface IProps {
-  user: IUser;
-}
-
-const ChatList = ({ user }: IProps) => {
+const ChatList = () => {
   const classes = useStyles();
   const [hidden, setHidden] = useState(false);
-  console.log(user.friends);
+  const user = useSelector((state: RootState) => state.user);
   return (
     <>
       <Box>

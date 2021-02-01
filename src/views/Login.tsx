@@ -24,9 +24,10 @@ import { useForm } from "react-hook-form";
 import { login } from "../api/login";
 import Loading from "../constom/loading";
 import * as UserStorage from "../utilies/storage/user";
-import { changeUser } from "../store/user/actionCreators";
 import { useSelector, useDispatch } from "react-redux";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { RootState } from "store/reducer";
+import { setUser } from "store/user";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,12 +49,12 @@ const useStyles = makeStyles((theme: Theme) =>
 const Login = () => {
   const classes = useStyles();
   // immutable
-  const user = useSelector((state: any) => state.getIn(["user", "user"]));
+  const user = useSelector((state: RootState) => state.user);
   const history = useHistory();
   const dispatch = useDispatch();
   const { handleSubmit, register, errors } = useForm();
   const [showPassword, setShowPassword] = useState(false);
-  const [userInfo, setUserInfo] = useState(user.toJS());
+  const [userInfo, setUserInfo] = useState(user);
   const [loading, setLoading] = useState(false);
 
   const handleChangeUserInfo = (e: any) => {
@@ -64,7 +65,6 @@ const Login = () => {
   };
 
   const handleLogin = (data: IUser) => {
-    console.log(data);
     setLoading(true);
     login({ username: data.username, password: data.password })
       .then((res: any) => {
@@ -75,7 +75,7 @@ const Login = () => {
           }
           UserStorage.setUer({ ...res.data, ...data });
           setLoading(false);
-          dispatch(changeUser({ ...res.data, ...data }));
+          dispatch(setUser({ ...res.data, ...data }));
           history.push("/main");
         } else {
           setLoading(false);
