@@ -12,7 +12,7 @@ import RouteWithSubRoutes from "../components/RouteWithSubRoutes";
 import NavBar from "../components/NavBar";
 import { routerConfigModel } from "../routes";
 import WebSocket from "utilies/socket";
-import { getToken } from "utilies/storage/user";
+import { getToken, getUser } from "utilies/storage/user";
 import { useHistory } from "react-router-dom";
 import clsx from "clsx";
 
@@ -45,10 +45,12 @@ const Home = ({ routes }: { routes: Array<routerConfigModel> }) => {
   const classes = useStyles();
   useEffect(() => {
     const token = getToken();
+    const user = getUser();
     if (token) {
       WebSocket.getInstance("ws://localhost:7001/", {
         query: {
           room: "demo",
+          userId: user._id,
           token,
         },
         transports: ["websocket"],

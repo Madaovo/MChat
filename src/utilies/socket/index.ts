@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import { getToken, getUser } from "../storage/user";
+import { getUser } from "../storage/user";
 
 const log = (...args: string[]) => {
   console.log(...args);
@@ -18,7 +18,7 @@ export default class WebSocket {
     WebSocket.instance = io(url, opts);
     WebSocket.instance.on("connect", () => {
       console.log("connect");
-      WebSocket.instance.on(WebSocket.instance.id, (data: any) => {
+      WebSocket.instance.on(user._id, (data: any) => {
         console.log(data);
       });
     });
